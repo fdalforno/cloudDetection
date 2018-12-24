@@ -73,7 +73,7 @@ class Tracker(object):
         self.name = name
         self.sat = ephem.readtle(name, tle1, tle2)
 
-        self.twilight = math.radians(-6)
+        self.twilight = 0
         self.sun = ephem.Sun()
     
     def getPosition(self,time = None):
