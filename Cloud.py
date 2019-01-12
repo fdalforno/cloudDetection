@@ -46,7 +46,7 @@ class Detector(object):
         
         return mask
 
-    def cloud_detection(self,image,mean = 200, overture = 80):
+    def cloud_detection(self,image,mean = 150, overture = 80):
         b,g,r = cv2.split(image)
         arrB = np.float32(b)
         arrG = np.float32(g)
@@ -65,14 +65,35 @@ class Detector(object):
 
         return mask
 
+    def water_detection(self,image,threshold = -0.7):
+        b,g,r = cv2.split(image)
+        arrB = np.float32(b)
+        arrR = np.float32(r)
+
+        num = (arrR - arrB)
+        denom = (arrR + arrB)
+        arrNdvi = np.divide(num,denom,where=denom > 0)
+
+        water = arrNdvi < threshold
+        mask = np.zeros(image.shape, dtype = "uint8")
+        mask[water] = (255,255,255)
+
+        return mask
+
+
     def detect(self,src):
         image = cv2.imread(src)
         rescaled = self.rescale(image,800)
+
         glass = self.detect_glass(rescaled)
         cloud = self.cloud_detection(rescaled)
 
+        water = self.water_detection(rescaled)
+        not_water = cv2.bitwise_not(water)
+
         glassMasked = cv2.bitwise_and(rescaled, glass)
         cloudMasked = cv2.bitwise_and(glassMasked, cloud)
+        cloudMasked =  cv2.bitwise_and(cloudMasked, not_water)
 
         return glass,cloud,cloudMasked
 
