@@ -58,7 +58,7 @@ class Measure(object):
         row.append(photo)
         self.writer.writerow(row)
 
-        if(self.measure % 10):
+        if (self.measure % 10) == 0:
             self.csv.flush()
 
         self.measure += 1
