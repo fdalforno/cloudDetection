@@ -15,8 +15,6 @@ class Photo(object):
         self.camera.hflip = True
         #self.camera.annotate_background = picamera.Color('black')
         #self.camera.iso = 800
-        self.astroPi = AstroPi()
-        
         
         self.folder = "./Data"
         
@@ -58,10 +56,12 @@ class Measure(object):
         row.append(cloudpx)
         row.append(glasspx)
         row.append(photo)
-
         self.writer.writerow(row)
-        self.measure += 1
 
+        if(self.measure % 10):
+            self.csv.flush()
+
+        self.measure += 1
 
     
     def close(self):
