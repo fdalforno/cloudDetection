@@ -82,7 +82,7 @@ class Tracker(object):
         self.twilight = 0
         self.sun = ephem.Sun() #this is the position of the Sun
     
-    def getPosition(self,time = None):4 #This function is used to get the position of the ISS
+    def getPosition(self,time = None): #This function is used to get the position of the ISS
         if(self.sat):
             if(time is None):
                 self.sat.compute()
